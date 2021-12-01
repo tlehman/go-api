@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Play Go in Go</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="/static/go-gophers.png" type="image/png" />
+  </head>
+  <body>
+		<h1>Go game written in Go</h1>
+    <img class="logo" src="/static/go-gophers.png" />
+		
+    {{ if .UserName }}
+      <p>Hello, {{ .UserName }}</p>
+    {{ else }}
+      <script
+        authed="location.reload()" src="https://auth.turbio.repl.co/script.js">
+      </script>
+    {{ end }}
+
+    <div class="author-creds">
+      Built by <a href="https://tobilehman.com">Tobi Lehman</a>
+    </div>
+  </body>
+</html>
