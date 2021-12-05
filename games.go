@@ -3,12 +3,18 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"errors"
 	"time"
+=======
+  "time"
+	"errors"
+>>>>>>> origin/main
 )
 
 // A Go Game has two players, and proceeds as a sequence of moves
 type Game struct {
+<<<<<<< HEAD
 	id         uint64
 	player1_id string // User id of player 1
 	player2_id string // User id of player 2
@@ -18,6 +24,17 @@ type Game struct {
 
 func NewGame(id uint64, player1 User, player2 User, size uint8) (Game, error) {
 	if size == uint8(0) {
+=======
+  id uint64
+  player1_id string // User id of player 1
+  player2_id string // User id of player 2
+  moves []Move
+	size uint8 // if size == 9, then the board is 9x9
+}
+
+func NewGame(id uint64, player1 User, player2 User, size uint8) (Game, error) {
+	if(size == uint8(0)) {
+>>>>>>> origin/main
 		return Game{}, errors.New("zero board size invalid")
 	}
 	g := Game{id: id, player1_id: player1.id, player2_id: player2.id, size: size}
@@ -26,16 +43,27 @@ func NewGame(id uint64, player1 User, player2 User, size uint8) (Game, error) {
 
 // During a Game, a player makes a Move at a point in time and space
 type Move struct {
+<<<<<<< HEAD
 	x         uint8
 	y         uint8
 	t         time.Time
 	player_id string // User id of player who made this move
+=======
+  x uint8
+  y uint8
+  t time.Time
+  player_id string // User id of player who made this move
+>>>>>>> origin/main
 }
 
 // A Move is only valid if it follows the rules of Go
 func play(g Game, nextMove Move) (Game, error) {
 	// (x,y) must be in the [1..size]x[1..size] integer plane
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> origin/main
 	var lastMove Move
 	for _, m := range g.moves {
 		lastMove = m
@@ -49,6 +77,7 @@ func play(g Game, nextMove Move) (Game, error) {
 
 	g.moves = append(g.moves, nextMove)
 
+<<<<<<< HEAD
 	return g, nil
 }
 
@@ -58,3 +87,9 @@ func state(g Game) [3][3]uint8 {
 											{0,0,0},
 											{0,0,0}}
 }
+=======
+  return g, nil
+}
+
+
+>>>>>>> origin/main

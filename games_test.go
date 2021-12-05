@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+<<<<<<< HEAD
 func TestNewGameState(t *testing.T) {
 	var g Game
 	var err error
@@ -24,6 +25,10 @@ func TestNewGameState(t *testing.T) {
 										  {0,0,0}} {
     t.Fatalf("%v is supposed to be all zeros", s)
 	}
+=======
+func TestNewGame(t *testing.T) {
+	
+>>>>>>> origin/main
 }
 
 // Verify that only players attached to a game can play
