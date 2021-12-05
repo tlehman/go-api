@@ -5,8 +5,25 @@ import (
 	"time"
 )
 
-func TestNewGame(t *testing.T) {
-	
+func TestNewGameState(t *testing.T) {
+	var g Game
+	var err error
+
+	// Alice and Bob are playing a game
+	a := User{name: "Alice", id: "1"}
+	b := User{name: "Bob", id: "2"}
+
+	// Before they start, the board state should equal this
+	g, err = NewGame(1, a, b, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := state(g)
+	if s != [3][3]uint8{{0,0,0},
+	                    {0,0,0},
+										  {0,0,0}} {
+    t.Fatalf("%v is supposed to be all zeros", s)
+	}
 }
 
 // Verify that only players attached to a game can play
