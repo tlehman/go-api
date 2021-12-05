@@ -11,8 +11,18 @@
 		<h1>Go game written in Go</h1>
     <img class="logo" src="/static/go-gophers.png" />
 		
-    {{ if .UserName }}
-      <p>Hello, {{ .UserName }}</p>
+    {{ if .IsLoggedIn }}
+      <p>Hello, {{ .LoggedInUser.Name }}</p>
+
+      <div id="root"></div>
+
+      <p>Here are a list of all registered users
+        <ul>
+        {{ range .RegisteredUsers }}
+          <li>{{ .Name }}</li>
+        {{ end }}
+        </ul>
+      </p>
     {{ else }}
       <script
         authed="location.reload()" src="https://auth.turbio.repl.co/script.js">

@@ -1,8 +1,12 @@
 body {
 	text-align: center;
-  width: 100%;
+  background-color: #eaddc0;
+  //background-color: #DCB35C;
+  font-family: 'Courier';
 }
+
 
 .logo { 
   width: 100%;
+  max-width: 400px;
 }

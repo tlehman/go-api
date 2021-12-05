@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"html/template"
-	"time"
+	"net/http"
 	"path"
+	"time"
 )
+
+var loggedInUser User
+var registeredUsers []User
 
 func handle(w http.ResponseWriter, r *http.Request) {
 	// You might want to move ParseGlob outside of handle so it doesn't
@@ -24,21 +27,28 @@ func handle(w http.ResponseWriter, r *http.Request) {
 		name = path.Base(r.URL.Path)
 	}
 
-  // Get the authentication headers
-  userId := r.Header.Get("X-Replit-User-Id")
-  userName := r.Header.Get("X-Replit-User-Name")
-  userRoles := r.Header.Get("X-Replit-User-Roles")
-  
-	data := struct{
-		Time time.Time
-    UserId string
-    UserName string
-    UserRoles string
+	// Get the authentication headers
+	userId := r.Header.Get("X-Replit-User-Id")
+	userName := r.Header.Get("X-Replit-User-Name")
+	userRoles := r.Header.Get("X-Replit-User-Roles")
+
+	isLoggedIn := false
+	if userName != "" {
+		loggedInUser = User{name: userName, id: userId, roles: userRoles}
+		registerUser(loggedInUser)
+		isLoggedIn = true
+	}
+
+	data := struct {
+		Time            time.Time
+		IsLoggedIn      bool
+		LoggedInUser    User
+		RegisteredUsers []User
 	}{
-		Time: time.Now(),
-    UserId: userId,
-    UserName: userName,
-    UserRoles: userRoles,
+		Time:            time.Now(),
+		IsLoggedIn:      isLoggedIn,
+		LoggedInUser:    loggedInUser,
+		RegisteredUsers: registeredUsers,
 	}
 
 	if err := tmpl.ExecuteTemplate(w, name, data); err != nil {
@@ -48,10 +58,10 @@ func handle(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("http server up!")
+	fmt.Println("go play go!")
 	http.Handle(
 		"/static/",
-		 http.StripPrefix(
+		http.StripPrefix(
 			"/static/",
 			http.FileServer(http.Dir("static")),
 		),
