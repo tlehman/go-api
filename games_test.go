@@ -125,31 +125,66 @@ func TestPlayUserRules(t *testing.T) {
 // Verify that the capture rules work
 // Reference: https://www.britgo.org/files/rules/GoQuickRef.pdf
 func TestPlayCaptureRules(t *testing.T) {
+	var g Game
 	var err error
 
 	// Alice and Bob are playing a game
 	a := User{name: "Alice", id: "1"}
 	b := User{name: "Bob", id: "2"}
 
-	_, err = NewGame(3, a, b, 13)
+	g, err = NewGame(3, a, b, 13)
 	if err != nil {
 		t.Fatal(err)
 	}
 
+	g, err = play(g, g.NewMove(3, 4))
+	g, err = play(g, g.NewMove(11,10))
+	g, err = play(g, g.NewMove( 4, 4))
+	g, err = play(g, g.NewMove( 3, 3))
+	g, err = play(g, g.NewMove(4,10))
+	g, err = play(g, g.NewMove(4, 3))
+	g, err = play(g, g.NewMove(4, 9))
+	g, err = play(g, g.NewMove(5, 4))
+	g, err = play(g, g.NewMove(5,10))
+	g, err = play(g, g.NewMove(4, 5))
+	g, err = play(g, g.NewMove(6,10))
+	g, err = play(g, g.NewMove(3, 5))
+	g, err = play(g, g.NewMove(6,11))
+	//g, err = play(g, g.NewMove(2, 4)) // should capture C4,C5
+	
+	actual := state(g)
+	expected := [][]uint8{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0},
+		{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	}
+	if !equal(expected, actual) {
+		t.Fatalf("actual = \n%s\n\nexpected = \n%s", slicefmt(actual), slicefmt(expected))
+	}
 	/*
-		C4
-		K10
-		D4
-		C3
-		D10
-		D3
-		D9
-		E4
-		E10
-		D5
-		F10
-		C5
-		F11
+		C4.   3, 4
+		K10. 11,10
+		D4.   4, 4
+		C3.   3, 3
+		D10.  4,10
+		D3.   4, 3
+		D9.   4, 9
+		E4.   5, 4
+		E10.  5,10
+		D5.   4, 5
+		F10.  6,10
+		C5.   3, 5
+		F11.  6,11
 		B4 (then C4,C5 are captured)
 	*/
 

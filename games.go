@@ -4,6 +4,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -84,9 +85,22 @@ func play(g Game, nextMove Move) (Game, error) {
 // The state of the game
 func state(g Game) [][]uint8 {
 	s := create2dSlice(g.size, g.size)
-	// Walk through moves, compute new state
+	// Walk through moves, compute board state
 	for _, move := range g.moves {
 		s[move.y-1][move.x-1] = g.playerNumber(move)
+		// find connected components in s
+		// for each connected component, count liberties
+		//   if count(liberties of connected component) == 0 {
+		// 			zero out connected component of dead component
+		//   }
+	}
+	return s
+}
+
+func slicefmt(sl [][]uint8) string {
+	var s string
+	for i := 0; i < len(sl); i++ {
+		s += fmt.Sprintf("%v\n", sl[i])
 	}
 	return s
 }
