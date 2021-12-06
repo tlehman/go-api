@@ -58,8 +58,8 @@ func TestGameStateNoCapture(t *testing.T) {
 		t.Fatal(err)
 	}
 
-  g, err = play(g, g.NewMove(1, 1)) // Player1 plays (1,1)
-  g, err = play(g, g.NewMove(2, 1)) // Player2 plays (2,1)
+	g, err = play(g, g.NewMove(1, 1)) // Player1 plays (1,1)
+	g, err = play(g, g.NewMove(2, 1)) // Player2 plays (2,1)
 
 	actual := state(g)
 	expected := [][]uint8{
@@ -67,12 +67,11 @@ func TestGameStateNoCapture(t *testing.T) {
 		{0, 0, 0},
 		{0, 0, 0},
 	}
-  
+
 	if !equal(expected, actual) {
 		t.Fatalf("%v is supposed to be %v", actual, expected)
 	}
 }
-
 
 // Verify that only players attached to a game can play
 func TestPlayUserRules(t *testing.T) {
