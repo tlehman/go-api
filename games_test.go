@@ -5,7 +5,20 @@ import (
 	"time"
 )
 
-<<<<<<< HEAD
+func equal(s [][]uint8, t [][]uint8) bool {
+	if len(s) != len(t) || cap(s) != cap(t) {
+		return false
+	}
+	for i := 0; i < len(s); i += 1 {
+		for j := 0; j < len(s[0]); j += 1 {
+			if s[i][j] != t[i][j] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func TestNewGameState(t *testing.T) {
 	var g Game
 	var err error
@@ -19,17 +32,47 @@ func TestNewGameState(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	s := state(g)
-	if s != [3][3]uint8{{0,0,0},
-	                    {0,0,0},
-										  {0,0,0}} {
-    t.Fatalf("%v is supposed to be all zeros", s)
+	actual := state(g)
+	expected := [][]uint8{
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
 	}
-=======
-func TestNewGame(t *testing.T) {
-	
->>>>>>> origin/main
+
+	if !equal(expected, actual) {
+		t.Fatalf("%v is supposed to be all zeros", actual)
+	}
 }
+
+func TestGameStateNoCapture(t *testing.T) {
+	var g Game
+	var err error
+
+	// Alice and Bob are playing a game
+	a := User{name: "Alice", id: "1"}
+	b := User{name: "Bob", id: "2"}
+
+	// Before they start, the board state should equal this
+	g, err = NewGame(1, a, b, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+  g, err = play(g, g.NewMove(1, 1)) // Player1 plays (1,1)
+  g, err = play(g, g.NewMove(2, 1)) // Player2 plays (2,1)
+
+	actual := state(g)
+	expected := [][]uint8{
+		{1, 2, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+	}
+  
+	if !equal(expected, actual) {
+		t.Fatalf("%v is supposed to be %v", actual, expected)
+	}
+}
+
 
 // Verify that only players attached to a game can play
 func TestPlayUserRules(t *testing.T) {
@@ -43,7 +86,7 @@ func TestPlayUserRules(t *testing.T) {
 
 	// Games cannot be 0x0, they must be at least 9x9
 	_, err = NewGame(1, a, b, 0)
-	if(err == nil) {
+	if err == nil {
 		t.Fatalf("size must be at least 1")
 	}
 
@@ -71,7 +114,7 @@ func TestPlayUserRules(t *testing.T) {
 		t.Fatalf("%v should not be playable in %v", m3, g1)
 	}
 
-	// Karen starts a game with Bob, and she can play 
+	// Karen starts a game with Bob, and she can play
 	// in that game
 	g2, _ = NewGame(2, k, b, 9)
 	g2, err = play(g2, m3)
@@ -94,22 +137,21 @@ func TestPlayCaptureRules(t *testing.T) {
 		t.Fatal(err)
 	}
 
-
 	/*
-	C4
-	K10
-	D4
-	C3
-	D10
-	D3
-	D9
-	E4
-	E10
-	D5
-	F10
-	C5
-	F11
-	B4 (then C4,C5 are captured)	
-	 */
-	
+		C4
+		K10
+		D4
+		C3
+		D10
+		D3
+		D9
+		E4
+		E10
+		D5
+		F10
+		C5
+		F11
+		B4 (then C4,C5 are captured)
+	*/
+
 }
