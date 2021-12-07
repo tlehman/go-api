@@ -150,14 +150,14 @@ func TestPlayCaptureRules(t *testing.T) {
 	g, err = play(g, g.NewMove(6,10))
 	g, err = play(g, g.NewMove(3, 5))
 	g, err = play(g, g.NewMove(6,11))
-	//g, err = play(g, g.NewMove(2, 4)) // should capture C4,C5
+	g, err = play(g, g.NewMove(2, 4)) // should capture C4,C5
 	
 	actual := state(g)
 	expected := [][]uint8{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

@@ -82,17 +82,96 @@ func play(g Game, nextMove Move) (Game, error) {
 	return g, nil
 }
 
-// The state of the game
+type Point struct {
+	x uint8
+	y uint8
+}
+type Component struct {
+	positions []Point
+	playerNumber uint8 // 0=empty, 1=player1, 2=player2
+	liberties uint
+}
+
+type Queue []Point
+type Set map[Point]bool
+
+// Breadth-First Search to find connected components
+func bfs(board [][]uint8) []Component {
+	// Maintain queue R of points that are 
+	// Reached, but not Searched.
+	var reached []Point = make([]Point, 0)
+	// Maintain a set S of points that have been 
+	// searched. Dequeue x from R, then visit all 
+	// of x's neighbors, store neighbors in R, 
+	// finally, put x in S (to call it fully searched)
+	var searched Set = make(map[Point]bool)
+
+	var components []Component = make([]Component, 0)
+	var component Component
+
+	for x := 0; x < len(board); x++ {
+		for y := 0; y < len(board[0]); y++ {
+			v := board[y][x] // value
+			fmt.Printf("x = %d, y = %d, v = %d\n", x, y, v)
+			p := Point{x: uint8(x), y: uint8(y)}
+
+			if v > 0 && !searched[p] {
+				reached = append(reached, p)
+				component = Component{playerNumber: v, positions: make([]Point, 0)}
+
+				for len(reached) > 0 {
+					// Dequeue from R (reached)
+					r := reached[0]
+					reached = reached[1:]
+					// Compute n(r), the neighbors of r
+					//    n
+					// w  r  e
+					//    s
+					if y > 0 && board[y-1][x] == v {
+						// north neighbor
+						n := Point{x: uint8(x), y: uint8(y-1)}
+						reached = append(reached, n)
+					}
+					if x < len(board)-1 && board[y][x+1] == v {
+						// east neighbor
+						e := Point{x: uint8(x+1), y: uint8(y)}
+						reached = append(reached, e)
+					}
+					if y < len(board)-1 && board[y+1][x] == v {
+						// south neighbor
+						n := Point{x: uint8(x), y: uint8(y+1)}
+						reached = append(reached, n)
+					}
+					if x > 0 && board[y][x-1] == v {
+						// west neighbor
+						w := Point{x: uint8(x-1), y: uint8(y)}
+						reached = append(reached, w)
+					}
+					// Now r is fully searched
+					searched[r] = true
+					component.positions = append(component.positions, r)
+				}
+				components = append(components, component)
+			}
+		}
+	}
+	return components
+}
+
+// The state of the board
 func state(g Game) [][]uint8 {
 	s := create2dSlice(g.size, g.size)
 	// Walk through moves, compute board state
 	for _, move := range g.moves {
 		s[move.y-1][move.x-1] = g.playerNumber(move)
 		// find connected components in s
-		// for each connected component, count liberties
-		//   if count(liberties of connected component) == 0 {
-		// 			zero out connected component of dead component
-		//   }
+		fmt.Printf("find connected components in s\n")
+		bfs(s)
+		
+		// count liberties
+		//  if count(liberties of connected component) == 0 {
+		// 		zero out connected component of dead component
+		//  }
 	}
 	return s
 }
