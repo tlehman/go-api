@@ -162,7 +162,6 @@ func TestPlayCaptureRules(t *testing.T) {
 	err = g.play(g.NewMove(6, 10))
 	err = g.play(g.NewMove(3, 5))
 	err = g.play(g.NewMove(6, 11))
-	//g, err = play(g, g.NewMove(2, 4)) // should capture C4,C5
 
 	actual := g.state
 	expected := [][]uint8{
@@ -184,7 +183,29 @@ func TestPlayCaptureRules(t *testing.T) {
 	if !equal(expected, actual) {
 		t.Fatalf("actual = \n%s\n\nexpected = \n%s", slicefmt(actual), slicefmt(expected))
 	}
-	
+
+	err = g.play(g.NewMove(2, 4)) // should capture C4,C5
+
+	actual = g.state
+	expected = [][]uint8{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0},
+		{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	}
+
+	if !equal(expected, actual) {
+		t.Fatalf("actual = \n%s\n\nexpected = \n%s", slicefmt(actual), slicefmt(expected))
+	}
 	/*
 		C4.   3, 4
 		K10. 11,10
@@ -200,6 +221,7 @@ func TestPlayCaptureRules(t *testing.T) {
 		C5.   3, 5
 		F11.  6,11
 		B4 (then C4,C5 are captured)
+
 	*/
 
 }

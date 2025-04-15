@@ -100,7 +100,7 @@ func (g *Game) NewMove(x uint8, y uint8) Move {
 		}
 	}
 	// translate 1..size to 0..size-1
-	return Move{x: x-1, y: y-1, t: time.Now(), player_id: player_id}
+	return Move{x: x - 1, y: y - 1, t: time.Now(), player_id: player_id}
 }
 
 // A Move is only valid if it follows the rules of Go
@@ -141,8 +141,8 @@ func (g *Game) play(nextMove Move) error {
 				playerNumber: playerNumber,
 			})
 		// Store component index for point p
-		g.pointToComponentIndex[p] = len(g.components)-1
-		// Commit move 
+		g.pointToComponentIndex[p] = len(g.components) - 1
+		// Commit move
 		g.moves = append(g.moves, nextMove)
 	} else if neighborCount == 1 {
 		// 2. Expand existing component
@@ -164,7 +164,7 @@ func (g *Game) play(nextMove Move) error {
 		g.components[compIdx].positions = append(g.components[compIdx].positions, p)
 		// Update state
 		g.state[p.y][p.x] = playerNumber
-		// Commit move 
+		// Commit move
 		g.moves = append(g.moves, nextMove)
 	}
 
